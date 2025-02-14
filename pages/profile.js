@@ -25,7 +25,7 @@ export default function ProfilePage() {
                     return;
                 }
 
-                const response = await axios.get("http://localhost:5009/me", {
+                const response = await axios.get("http://54.236.104.97:5009/me", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
@@ -67,7 +67,7 @@ export default function ProfilePage() {
     
             console.log("📡 Enviando actualización:", updatedUser);
     
-            const response = await axios.put("http://localhost:5007/users/me", updatedUser, {
+            const response = await axios.put("http://3.213.150.0:5007/users/me", updatedUser, {
                 headers: { Authorization: `Bearer ${token}` },
             });
     
@@ -86,7 +86,7 @@ export default function ProfilePage() {
         try {
             const token = localStorage.getItem("token");
     
-            await axios.delete("http://localhost:5008/me", {
+            await axios.delete("http://3.231.45.95:5008/me", {
                 headers: { Authorization: `Bearer ${token}` }
             });
     

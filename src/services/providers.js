@@ -1,18 +1,16 @@
 import { GraphQLClient, gql } from "graphql-request";
 
-// 📌 Servidores correctos según tu arquitectura
-const READ_GRAPHQL_API = "http://localhost:4003"; // ReadProvider
-const CREATE_GRAPHQL_API = "http://localhost:4000"; // CreateProvider
-const UPDATE_GRAPHQL_API = "http://localhost:4002"; // ✅ UpdateProvider en 4002
-const DELETE_GRAPHQL_API = "http://localhost:4001"; // 📌 Servidor de DeleteProvider
+// 📌 Configuración de los servidores EC2
+const READ_GRAPHQL_API = "http://3.229.198.244:4003"; // ReadProvider (Consulta de proveedores)
+const CREATE_GRAPHQL_API = "http://34.198.77.62:4000"; // CreateProvider (Creación de proveedores)
+const UPDATE_GRAPHQL_API = "http://52.5.181.183:4002"; // UpdateProvider (Actualización de proveedores)
+const DELETE_GRAPHQL_API = "http://23.21.70.193:4001"; // DeleteProvider (Eliminación de proveedores)
 
-
-// Crear clientes GraphQL
-const readClient = new GraphQLClient(READ_GRAPHQL_API);
+// ✅ Crear clientes GraphQL
+const readClient = new GraphQLClient(READ_GRAPHQL_API); 
 const createClient = new GraphQLClient(CREATE_GRAPHQL_API);
-const updateClient = new GraphQLClient(UPDATE_GRAPHQL_API); // ✅ Usamos el correcto
+const updateClient = new GraphQLClient(UPDATE_GRAPHQL_API);
 const deleteClient = new GraphQLClient(DELETE_GRAPHQL_API);
-
 
 // 🔹 Obtener proveedores (QUERY)
 export const getProviders = async () => {
@@ -37,7 +35,7 @@ export const getProviders = async () => {
     }
 };
 
-// 🔹 Crear proveedor (MUTATION) en `localhost:4000`
+// 🔹 Crear proveedor (MUTATION)
 export const createProvider = async (providerData) => {
     const mutation = gql`
         mutation ($name: String!, $address: String!, $email: String!) {
@@ -57,7 +55,6 @@ export const createProvider = async (providerData) => {
             email: providerData.email,
         };
 
-        // ✅ Ahora sí usamos `createClient` para la mutación
         const data = await createClient.request(mutation, variables);
         console.log("✅ Proveedor agregado:", data.createProvider);
         return data.createProvider;
@@ -67,10 +64,7 @@ export const createProvider = async (providerData) => {
     }
 };
 
-
-
-
-// 🔹 Mutación para actualizar proveedor en `localhost:4002`
+// 🔹 Actualizar proveedor (MUTATION)
 export const updateProvider = async (providerData) => {
     const mutation = gql`
         mutation UpdateProvider($id: ID!, $input: ProviderInput!) {
@@ -85,7 +79,7 @@ export const updateProvider = async (providerData) => {
 
     try {
         const variables = {
-            id: parseInt(providerData.id), // ✅ Convertir a número
+            id: parseInt(providerData.id),
             input: {
                 name: providerData.name,
                 address: providerData.address,
@@ -93,9 +87,8 @@ export const updateProvider = async (providerData) => {
             },
         };
 
-        console.log("📡 Enviando mutación a GraphQL en 4002 con variables:", variables);
-
-        const data = await updateClient.request(mutation, variables); // ✅ Se envía al `updateClient` (4002)
+        console.log("📡 Enviando mutación a GraphQL en UpdateProvider:", variables);
+        const data = await updateClient.request(mutation, variables);
         console.log("✅ Proveedor actualizado:", data.updateProvider);
         return data.updateProvider;
     } catch (error) {
@@ -104,8 +97,7 @@ export const updateProvider = async (providerData) => {
     }
 };
 
-
-// Eliminar proveedor (MUTATION)
+// 🔹 Eliminar proveedor (MUTATION)
 export const deleteProvider = async (id) => {
     const mutation = gql`
         mutation DeleteProvider($id: ID!) {
@@ -117,7 +109,7 @@ export const deleteProvider = async (id) => {
         const variables = { id };
         const data = await deleteClient.request(mutation, variables);
         console.log("🗑️ Proveedor eliminado:", data);
-        return id; // Solo retornamos el ID eliminado, ya que GraphQL no devuelve más datos
+        return id;
     } catch (error) {
         console.error("❌ Error al eliminar proveedor:", error.response || error);
         throw error;

@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const READ_API = "http://localhost:8082/customers";
-const CREATE_API = "http://localhost:8081/customers";
+const READ_API = "http://54.87.55.114:8082/customers";
+const CREATE_API = "http://44.207.106.151:8081/customers";
 const UPDATE_API = "http://localhost:8083/customers";
 const DELETE_API = "http://localhost:8084/customers";
 
 // 🔹 Obtener lista de clientes desde la API REST
 export const getCustomers = async () => {
     try {
-        const res = await fetch("http://localhost:8082/customers"); // ✅ Endpoint correcto de REST API
+        const res = await fetch("http://54.87.55.114:8082/customers"); // ✅ Endpoint correcto de REST API
         const data = await res.json(); // 🔹 Convertir la respuesta a JSON
         console.log("📡 Clientes recibidos:", data);
         return data; // ✅ La API ya devuelve un array de clientes

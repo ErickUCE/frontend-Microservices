@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from "graphql-request";
 
-const GRAPHQL_API = process.env.NEXT_PUBLIC_GRAPHQL_PROVIDER_URL || "http://localhost:4003";
+const GRAPHQL_API = process.env.NEXT_PUBLIC_GRAPHQL_PROVIDER_URL || "http://44.203.59.51:4003";
 
 // 📡 Configurar cliente GraphQL
 const client = new GraphQLClient(GRAPHQL_API, { headers: {} });

@@ -16,12 +16,11 @@ export default function LoginPage() {
         password: "",
         phone_number: ""
     });
-
     const router = useRouter();
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://localhost:5009/login", { email, password });
+            const response = await axios.post("http://54.236.104.97:5009/login", { email, password });
             localStorage.setItem("token", response.data.token);
             router.push("/dashboard");
         } catch (error) {
@@ -31,7 +30,7 @@ export default function LoginPage() {
 
     const handleRegister = async () => {
         try {
-            await axios.post("http://localhost:5009/register", registerData);
+            await axios.post("http://54.236.104.97:5009/register", registerData);
             alert("Registration successful! Please log in.");
             setShowRegister(false);
         } catch (error) {
@@ -40,26 +39,30 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="container mt-5">
-            {/* Navbar Superior */}
-            <nav className="navbar navbar-dark bg-primary mb-4">
-                <div className="container">
-                    <span className="navbar-brand fw-bold">🔧 Repuestos Erteo</span>
-                </div>
-            </nav>
-            
-            <div className="card p-4 shadow-lg">
-                <h2 className="text-center mb-3">🔐 Login</h2>
+        <div className="d-flex justify-content-center align-items-center vh-100" style={{ 
+            backgroundImage: "url('/images/mc.png')", 
+            backgroundSize: "cover", 
+            backgroundPosition: "center", 
+            backgroundRepeat: "no-repeat", 
+            width: "100vw",
+            height: "100vh"
+        }}>
+            <div className="login-container p-4 bg-white rounded shadow" style={{ width: "400px", backgroundColor: "rgba(255, 255, 255, 0.4)", backdropFilter: "blur(10px)" }}>
+            <h2 className="text-center" style={{ color: 'red' }}>McQueen AutoParts</h2>
                 {error && <div className="alert alert-danger">{error}</div>}
-                
-                <input className="form-control mb-2" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input className="form-control mb-2" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button className="btn btn-primary w-100" onClick={handleLogin}>Sign In</button>
-                
-                <button className="btn btn-link mt-2" onClick={() => setShowRegister(true)}>Don't have an account? Register here</button>
+                <label htmlFor="email">Email:</label>
+                <input id="email" className="form-control mb-2" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label htmlFor="password">Password:</label>
+                <input id="password" className="form-control mb-2" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="showPassword" onChange={(e) => {
+                        document.getElementById("password").type = e.target.checked ? "text" : "password";
+                    }} />
+                    <label className="form-check-label" htmlFor="showPassword">Show Password</label>
+                </div>
+                <button className="btn w-100 mt-3 text-white" style={{ background: "#ff0c0c" }} onClick={handleLogin}>⚡Login⚡</button>
+                <button className="btn btn-link mt-2" onClick={() => setShowRegister(true)}>Don't have an account? Register here 👇🏻</button>
             </div>
-
-            {/* Registration Modal */}
             {showRegister && (
                 <div className="modal show d-block">
                     <div className="modal-dialog">
@@ -84,13 +87,6 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
-            
-            {/* Navbar Inferior */}
-            <footer className="navbar fixed-bottom navbar-dark bg-dark text-center text-white p-2">
-                <div className="container">
-                    <span>&copy; 2025 Repuestos Erteo. All rights reserved.</span>
-                </div>
-            </footer>
         </div>
     );
 }

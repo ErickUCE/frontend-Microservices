@@ -29,14 +29,14 @@ export default function ProductsPage() {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get("http://localhost:8002/products");
+            const response = await axios.get("http://44.195.73.5:8007/products");
             setProducts(response.data);
         } catch (error) {
             console.error("❌ Error obteniendo productos:", error);
         }
     };
 
-    const GRAPHQL_API = "http://localhost:4003";
+    const GRAPHQL_API = "http://3.229.198.244:4003";
     const fetchProviders = async () => {
         const client = new GraphQLClient(GRAPHQL_API);
         const query = gql`
@@ -59,7 +59,33 @@ export default function ProductsPage() {
 
     const handleCreateProduct = async () => {
         try {
-            await axios.post("http://localhost:8000/products", newProduct);
+            console.log("🛰️ Enviando datos al backend:", newProduct);
+    
+            // 🔥 Validar que precio y proveedor_id sean números
+            if (!newProduct.nombreProducto || !newProduct.descripcion || !newProduct.marca) {
+                console.error("❌ Faltan datos obligatorios");
+                alert("Debes completar todos los campos antes de guardar.");
+                return;
+            }
+    
+            // Convertir precio y proveedor_id a número
+            newProduct.precio = Number(newProduct.precio);
+            newProduct.proveedor_id = Number(newProduct.proveedor_id);
+    
+            // Validar que precio y proveedor_id sean números válidos
+            if (isNaN(newProduct.precio) || isNaN(newProduct.proveedor_id)) {
+                console.error("❌ Datos inválidos:", newProduct);
+                alert("Precio y Proveedor ID deben ser números.");
+                return;
+            }
+    
+            // 🔥 Enviar la petición al backend
+            await axios.post("http://13.216.61.88:8000/products", newProduct, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
             fetchProducts();
             setShowModal(false);
             setNewProduct({ nombreProducto: "", descripcion: "", marca: "", precio: "", proveedor_id: "" });
@@ -67,11 +93,13 @@ export default function ProductsPage() {
             console.error("❌ Error creando producto:", error);
         }
     };
+    
+    
 
     const handleUpdateProduct = async () => {
         if (!editingProduct) return;
         try {
-            await axios.put(`http://localhost:8003/products/${editingProduct.id}`, editingProduct);
+            await axios.put(`http://54.165.250.5:8006/products/${editingProduct.id}`, editingProduct);
             fetchProducts();
             setShowEditModal(false);
             setEditingProduct(null);
@@ -82,7 +110,7 @@ export default function ProductsPage() {
 
     const handleDeleteProduct = async () => {
         try {
-            await axios.delete(`http://localhost:8004/products/${deletingProduct.id}`);
+            await axios.delete(`http://52.44.127.200:8005/products/${deletingProduct.id}`);
             fetchProducts();
             setShowDeleteModal(false);
             setDeletingProduct(null);

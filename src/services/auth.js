@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5009"; // Reemplaza con el puerto de AuthService
+const API_URL = "http://54.236.104.97:5009"; // Reemplaza con el puerto de AuthService
 
 // ✅ Iniciar sesión
 export const login = async (email, password) => {
