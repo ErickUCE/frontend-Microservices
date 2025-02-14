@@ -18,8 +18,8 @@ jobs:
 
       - name: Construir y subir imagen a Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/parking-lux-frontend:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/parking-lux-frontend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest 
 
       - name: Conectar a AWS EC2 y desplegar
         uses: appleboy/ssh-action@master
@@ -31,10 +31,10 @@ jobs:
             echo "🚀 Iniciando despliegue en AWS EC2..."
 
             # Detener y eliminar el contenedor si ya existe
-            if sudo docker ps -a --format '{{.Names}}' | grep -q parking-lux-frontend; then
+            if sudo docker ps -a --format '{{.Names}}' | grep -q nextjs-app:latest; then
               echo "🛑 Deteniendo y eliminando contenedor existente..."
-              sudo docker stop parking-lux-frontend
-              sudo docker rm parking-lux-frontend
+              sudo docker stop aws-stores-container
+              sudo docker rm aws-stores-container
             fi
 
             # Remover imágenes antiguas para evitar acumulación
@@ -43,12 +43,12 @@ jobs:
 
             # .Descargar la última versión de la imagen desde Docker Hub
             echo "📥 Descargando nueva imagen..."
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/parking-lux-frontend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest
 
             # Ejecutar el nuevo contenedor en el puerto 3000
             echo "🚀 Ejecutando nuevo contenedor..."
-            sudo docker run -d --name parking-lux-frontend \
+            sudo docker run -d --name aws-stores-container \
               -p 3000:3000 \
-              ${{ secrets.DOCKER_USERNAME }}/parking-lux-frontend:latest
+              ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest
 
             echo "✅ Despliegue completado con éxito."
