@@ -5,7 +5,7 @@ export default function HomePage() {
     return (
         <div className="container mt-5 text-center">
             <h1 className="fw-bold">🚀 Sistema de Gestión</h1>
-            <p>Administra usuarios con autenticación segura.</p>
+            <p>Administra usuarios con autenticación segura0--.</p>
             <Link href="/login">
                 <button className="btn btn-primary mx-2">🔐 Iniciar Sesión</button>
             </Link>
